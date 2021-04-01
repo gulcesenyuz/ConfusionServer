@@ -25,7 +25,7 @@ var commentSchema = new Schema({
     timestamps: true
 });
 
-var dishSchema = new Schema({
+const dishSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -37,30 +37,29 @@ var dishSchema = new Schema({
     },
     image: {
         type: String,
-        required: true,
+        required: true
     },
     category: {
         type: String,
-        required: true,
+        required: true
     },
     label: {
         type: String,
-        default: '',
+        default: ''
     },
     price: {
         type: Currency,
         required: true,
-        min: 0,
+        min: 0
     },
     featured: {
         type: Boolean,
-        default: false,
+        default: false
     },
     comments: [commentSchema]
 }, {
     timestamps: true
 });
-
 
 var Dishes = mongoose.model('Dish', dishSchema);
 
