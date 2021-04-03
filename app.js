@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 const mongoose = require('mongoose');
 const Questions = require('./models/question');
+const Frequent = require('./models/frequentq');
 const url = 'mongodb://localhost:27017/conFusion';
 const connect = mongoose.connect(url);
 
@@ -13,10 +14,12 @@ const connect = mongoose.connect(url);
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var questionRouter = require('./routes/questionRouter');
+var frequentRouter = require('./routes/frequentRouter');
+
 
 
 connect.then((db) => {
-  console.log('Connected to SERVER');
+  console.log('Connected to Erasmus Help Desk SERVER');
 }, (err) => {
   console.log(err)
 });
@@ -37,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/questions', questionRouter);
+app.use('/frequents', frequentRouter);
 
 
 // catch 404 and forward to error handler
