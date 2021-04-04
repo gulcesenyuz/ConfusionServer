@@ -33,6 +33,39 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+function auth(req, res, next) {
+  console.log(req.headers);
+
+  var authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    var err = new ErrorEvent('you are not allowed user / not authenticated');
+    res.setHeader('WWW-Authenticate', 'Basic');
+    err.status = 401;
+    return next(err);
+  }
+  //extract the username and password
+  var auth = new Buffer(authHeader.split('')[1], 'base64').toString().split(':')
+  var username = auth[0];
+  var password = auth[1];
+
+  //from the auth their request will passed on the next set of middleware
+  //here and then Express will try to match the specific request 
+  //to were specific middleware which will service that request
+  if (username === 'admin' && password === 'password') {
+    next();
+  }
+  else {
+    var err = new ErrorEvent('you are not allowed user / not authenticated');
+    res.setHeader('WWW-Authenticate', 'Basic');
+    err.status = 401;
+    return next(err);
+  }
+}
+
+app.use(auth);
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);

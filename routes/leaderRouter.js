@@ -14,7 +14,7 @@ leaderRouter.route('/')
             .then((leaders) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
-                res.json(promotions);
+                res.json(leaders);
             }, (err) => next(leaders))
             .catch((err) => next(err));
     })
@@ -78,7 +78,7 @@ leaderRouter.route('/:leaderId')
     })
 
     .delete((req, res, next) => {
-        Leaders.findByIdAndRemove(req.params.promoId)
+        Leaders.findByIdAndRemove(req.params.leaderId)
             .then((leader) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
