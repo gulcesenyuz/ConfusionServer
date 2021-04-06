@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var session = require('./express-session');
+var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 
 const mongoose = require('mongoose');
@@ -46,9 +46,9 @@ app.use(session({
 
 
 function auth(req, res, next) {
-  console.log(req.signedCookies);
+  console.log(req.session);
   //if user not authorized 
-  if (!req.signedCookies.user) {
+  if (!req.session.user) {
     //make authorization
     var authHeader = req.headers.authorization;
     // if auth header not avaible
@@ -67,7 +67,7 @@ function auth(req, res, next) {
     var pass = auth[1];
     if (user == 'admin' && pass == 'password') {
       // the user becomes admin
-      res.cookie('user', 'admin', { signed: true })
+      req.session.user = 'admin';
       next(); // authorized
     } else {
       var err = new Error('You are not authenticated!');
@@ -77,7 +77,7 @@ function auth(req, res, next) {
     }
 
   } else {
-    if (req.signedCookies.user === 'admin') {
+    if (req.session.user === 'admin') {
       next();
 
     }
@@ -93,8 +93,6 @@ function auth(req, res, next) {
 
 
 
-
-app.use(auth);
 
 app.use(auth);
 
