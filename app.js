@@ -47,8 +47,8 @@ function auth(req, res, next) {
       var err = new Error('You are not authenticated!');
       res.setHeader('WWW-Authenticate', 'Basic');
       err.status = 401;
-      next(err);
-      return;
+
+      return next(err);
     }
     // if auth header is included
 
@@ -66,10 +66,23 @@ function auth(req, res, next) {
       next(err);
     }
 
+  } else {
+    if (req.signedCookies.user === 'admin') {
+      next();
+
+    }
+    else {
+      var err = new Error('You are not authenticated!');
+      err.status = 401;
+      return next(err);
+    }
+
   }
 
-
 }
+
+
+
 
 app.use(auth);
 
