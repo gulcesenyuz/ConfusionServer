@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require('./express-session');
+var FileStore = require('session-file-store')(session);
 
 const mongoose = require('mongoose');
 const Dishes = require('./models/dishes');
@@ -32,7 +34,15 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser('12345-6789-8520-7958'));
+//app.use(cookieParser('12345-6789-8520-7958'));
+
+app.use(session({
+  name: 'session-id',
+  secret: '12345 - 6789 - 8520 - 7958',
+  saveUninitialized: false,
+  resave: false,
+  store: new FileStore()
+}));
 
 
 function auth(req, res, next) {
