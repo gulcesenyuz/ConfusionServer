@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var User = new Schema({
-    usernam: {
+    username: {
         type: String,
         required: true,
         unique: true,
@@ -19,4 +19,5 @@ var User = new Schema({
 
 });
 
-module.export = mongoode.model('User', User);
+var User = mongoose.model('User', User);
+module.exports = User;
