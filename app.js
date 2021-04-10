@@ -14,9 +14,11 @@ const Dishes = require('./models/dishes');
 var passport = require('passport');
 var authenticate = require('./authenticate');
 var config = require('./config');
-
+var index = require('./routes/index');
+var users = require('./routes/users');
 
 const url = config.mongoUrl;
+
 const connect = mongoose.connect(url, {
   useMongoClient: true
 });

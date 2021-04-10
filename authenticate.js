@@ -9,7 +9,8 @@ var jwt = require('jsonwebtoken');
 
 var config = require('./config');
 
-exports.local = passport.use(new LocalStrategy(User.authenticate()));
+passport.use(new LocalStrategy(User.authenticate()));
+
 
 //this basically takes the user information.
 // Now recall that the passport authenticate will mount the req.user or
