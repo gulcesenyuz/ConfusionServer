@@ -7,6 +7,10 @@ var leaderSchema = new Schema({
         required: true,
         unique: true
     },
+    description: {
+        type: String,
+        required: true
+    },
     image: {
         type: String,
         required: true
@@ -17,15 +21,15 @@ var leaderSchema = new Schema({
     },
     abbr: {
         type: String,
-        required: true,
-    },
-    description: {
-        type: String,
         required: true
     },
+    featured: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true
 });
-
 var Leaders = mongoose.model('Leader', leaderSchema);
+
 module.exports = Leaders;

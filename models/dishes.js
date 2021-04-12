@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-//this will do is to load this new currency type into Mongoose.
 require('mongoose-currency').loadType(mongoose);
-//use of this in defining the schema in my application
-const Currency = mongoose.Types.Currency;
+var Currency = mongoose.Types.Currency;
 
 var commentSchema = new Schema({
     rating: {
@@ -18,14 +16,14 @@ var commentSchema = new Schema({
         required: true
     },
     author: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }
 }, {
     timestamps: true
 });
 
-const dishSchema = new Schema({
+var dishSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -60,7 +58,6 @@ const dishSchema = new Schema({
 }, {
     timestamps: true
 });
-
 var Dishes = mongoose.model('Dish', dishSchema);
 
 module.exports = Dishes;

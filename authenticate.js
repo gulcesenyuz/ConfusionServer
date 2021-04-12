@@ -1,33 +1,19 @@
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('./models/user');
-
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
-var jwt = require('jsonwebtoken');
+var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
+var config = require('./config.js');
 
-var config = require('./config');
-
-passport.use(new LocalStrategy(User.authenticate()));
-
-
-//this basically takes the user information.
-// Now recall that the passport authenticate will mount the req.user or
-// the user property to the request message and so that user information
-// will be serialized and deserialized realized by using this saying serialize user 
-//and passport deserialize user.
-
-//Passport.serialize ve passport.deserialize,
-// kimliği kullanıcının tarayıcısında çerez olarak ayarlamak 
-//ve daha sonra geri aramada kullanıcı bilgilerini almak için 
-//kullanıldığında çerezden kimliği almak için kullanılır
-
+exports.local = passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 exports.getToken = function (user) {
-    return jwt.sign(user, config.secretKey, { expiresIn: 3600 });
+    return jwt.sign(user, config.secretKey,
+        { expiresIn: 3600 });
 };
 
 var opts = {};
@@ -51,3 +37,19 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts,
     }));
 
 exports.verifyUser = passport.authenticate('jwt', { session: false });
+
+exports.verifyAdmin = function (req, res, next) {
+    User.findOne({ _id: req.user._id })
+        .then((user) => {
+            console.log("User: ", req.user);
+            if (user.admin) {
+                next();
+            }
+            else {
+                err = new Error('You are not authorized to perform this operation!');
+                err.status = 403;
+                return next(err);
+            }
+        }, (err) => next(err))
+        .catch((err) => next(err))
+}
