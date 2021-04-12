@@ -11,8 +11,8 @@ const url = 'mongodb://localhost:27017/conFusion';
 const connect = mongoose.connect(url);
 
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var index = require('./routes/index');
+var users = require('./routes/users');
 var questionRouter = require('./routes/questionRouter');
 var frequentRouter = require('./routes/frequentRouter');
 
@@ -37,8 +37,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/', index);
+app.use('/users', users);
 app.use('/questions', questionRouter);
 app.use('/frequents', frequentRouter);
 
